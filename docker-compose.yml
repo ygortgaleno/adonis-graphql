@@ -1,0 +1,46 @@
+version: '3.6'
+
+services:
+  adonisjs-example:
+    image: adonisjs-example
+    build:
+      context: src
+      dockerfile: ../docker/Dockerfile
+    container_name: adonis-example
+    environment:
+      NODE_ENV: development
+      DB_USER: ${POSTGRES_USER:-adonisSample}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-adonisSample}
+      DB_DATABASE: ${POSTGRES_DB:-adonis}
+      DB_HOST: ${POSTGRES_HOST:-postgres}
+    volumes:
+      - ./src/app:/usr/src/app
+      - ./src/healthCheck:/usr/src/healthCheck
+      - ./src/config:/usr/src/config
+      - ./src/database:/usr/src/database
+      - ./src/start:/usr/src/start
+      - ./src/.env:/usr/src/.env
+      - ./src/.env.example:/usr/src/.env.example
+      - ./src/ace:/usr/src/ace
+      - ./src/package.json:/usr/src/package.json
+      - ./src/server.js:/usr/src/server.js
+      - ./src/yarn.lock:/usr/src/yarn.lock
+      - node_modules:/usr/src/app/node_modules
+    depends_on:
+      - postgres
+    ports:
+      - 3333:3333
+
+  postgres:
+    image: postgres:11.4
+    container_name: postgres-adonis
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-adonisSample}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-adonisSample}
+      POSTGRES_DB: ${POSTGRES_DB:-adonis}
+    ports:
+      - 5432:5432
+
+
+volumes:
+  node_modules: {}
