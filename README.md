@@ -1,28 +1,39 @@
-# Adonis API application
+# Adonis GraphQL API application
 
-This is the boilerplate for creating an API server in AdonisJs, it comes pre-configured with.
-
-1. Bodyparser
-2. Authentication
-3. CORS
-4. Lucid ORM
-5. Migrations and seeds
+Sample application with framework adonis and graphql
 
 ## Setup
 
-Use the adonis command to install the blueprint
+Docker **_recomended_**
 
+_docker-compose_
+
+- First time running
 ```bash
-adonis new yardstick --api-only
+docker-compose up --build
 ```
-
-or manually clone the repo and then run `npm install`.
-
-
-### Migrations
-
-Run the following command to run startup migrations.
-
-```js
-adonis migration:run
+- Other times 
+```bash
+docker-compose up
 ```
+The app will be runinng on ```3333``` port
+
+
+## App routes
+
+You can test graphql console in `/credentials/graphiql`  and `/users/graphiql` (this one you must be authenticated with jwt baerer, insomnia or postman should help) 
+
+### [/credentials]
+
+- Mutation
+  - register(username: String!, password: String!, email: String!)
+  - login (email: String!, password: String!)
+
+### [/users] must be authenticated with jwt baerer
+
+- Query
+  - fetchUser
+- Mutation
+  - editUser(emal: String, password: String)
+  - removeUser
+
