@@ -5,13 +5,12 @@ type User {
 }
 
 type Query {
-  allUsers: [User]
-  fetchUsers(id: Int!): User
+  fetchUser: User
 }
 
 type Mutation {
   login (email: String!, password: String!): String
-  editUser (id:Int! email: String, password: String): User!
-  removeUser(id: Int!): Boolean!
+  editUser (email: String, password: String): User!
+  removeUser(password: String!): Boolean!
   createUser (username: String!, email: String!, password: String!): User
 }

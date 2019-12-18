@@ -16,14 +16,14 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 const GraphqlAdonis = use('ApolloServer')
-const schema = require('../app/graphql')
+const { userGraphql } = require('../app/graphql')
 
 Route.route(
-  "/graphql",
+  "/user",
   ({ request, auth, response }) => {
     return GraphqlAdonis.graphql(
       {
-        schema,
+        schema: userGraphql,
         context: { auth }
       },
       request,
@@ -33,6 +33,6 @@ Route.route(
   ["GET", "POST"]
 );
 
-Route.get("/graphiql", ({ request, response }) => {
-  return GraphqlAdonis.graphiql({ endpointURL: "/graphql" }, request, response);
+Route.get("/user/graphiql", ({ request, response }) => {
+  return GraphqlAdonis.graphiql({ endpointURL: "/user" }, request, response);
 });
