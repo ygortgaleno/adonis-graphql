@@ -21,19 +21,17 @@ The app will be runinng on ```3333``` port
 
 ## App routes
 
-You can test graphql console in `/credentials/graphiql`  and `/users/graphiql` (this one you must be authenticated with jwt baerer, insomnia or postman should help) 
-
 ### [/credentials]
 
 - Mutation
   - register(username: String!, password: String!, email: String!)
   - login (email: String!, password: String!)
 
-### [/users] must be authenticated with jwt baerer
+### [/users] should be authenticated with jwt baerer
 
 - Query
   - fetchUser
 - Mutation
-  - editUser(emal: String, password: String)
-  - removeUser
+  - editUser(email: String, password: String)
+  - removeUser(password: String!)
 

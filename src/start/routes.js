@@ -39,19 +39,5 @@ Route.route('/users', ({ request, auth, response }) => {
     request,
     response
   )
-}, ['POST', 'GET', 'UPDATE', 'DELETE']
+}, ['POST', 'GET']
 ).middleware(['auth'])
-
-if (process.env.NODE_ENV === 'development') {
-  Route.get('/credentials/graphiql', ({ request, response }) => {
-    return GraphqlAdonis.graphiql(
-      { endpointURL: '/credentials' },
-      request,
-      response
-    )
-  })
-
-  Route.get('/users/graphiql', ({ request, response }) => {
-    return GraphqlAdonis.graphiql({ endpointURL: '/users' }, request, response)
-  }).middleware(['auth'])
-}
