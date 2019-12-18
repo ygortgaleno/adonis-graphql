@@ -8,7 +8,7 @@ const sleep = (time) => new Promise(
 
 const connect = async ({ retries, time }) => {
   if (retries === 0) {
-    console.error('Cant connect into database exiting...')
+    console.error('Can\'t connect into database exiting...')
     process.exit(1)
   }
 

@@ -1,4 +1,4 @@
-'use strict'
+"use strict";
 
 /*
 |--------------------------------------------------------------------------
@@ -14,12 +14,27 @@
 */
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
-const Route = use('Route')
-const GraphqlAdonis = use('ApolloServer')
-const { userGraphql } = require('../app/graphql')
+const Route = use("Route");
+const GraphqlAdonis = use("ApolloServer");
+const { userGraphql, credentialUserGraphql } = require("../app/graphql");
 
 Route.route(
-  "/user",
+  "/credentials",
+  ({ request, auth, response }) => {
+    return GraphqlAdonis.graphql(
+      {
+        schema: credentialUserGraphql,
+        context: { auth }
+      },
+      request,
+      response
+    );
+  },
+  ["POST"]
+);
+
+Route.route(
+  "/users",
   ({ request, auth, response }) => {
     return GraphqlAdonis.graphql(
       {
@@ -30,9 +45,19 @@ Route.route(
       response
     );
   },
-  ["GET", "POST"]
-);
+  ["POST", "GET", "UPDATE", "DELETE"]
+).middleware(["auth"]);
 
-Route.get("/user/graphiql", ({ request, response }) => {
-  return GraphqlAdonis.graphiql({ endpointURL: "/user" }, request, response);
-});
+if (process.env.NODE_ENV === "test" || 'development') {
+  Route.get("/credentials/graphiql", ({ request, response }) => {
+    return GraphqlAdonis.graphiql(
+      { endpointURL: "/credentials" },
+      request,
+      response
+    );
+  });
+
+  Route.get("/users/graphiql", ({ request, response }) => {
+    return GraphqlAdonis.graphiql({ endpointURL: "/users" }, request, response);
+  }).middleware(["auth"]);
+}

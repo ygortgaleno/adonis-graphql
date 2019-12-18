@@ -1,5 +1,4 @@
 const User = use('App/Models/User')
-const Token = use('App/Models/Token')
 
 const authorizeAndReturnUser = async (auth) => {
   try {
@@ -41,11 +40,6 @@ module.exports = {
   },
 
   Mutation: {
-    async createUser(_root, { username, email, password }) {
-      const newUser = await User.create({username, email, password})
-      return newUser
-    },
-
     async editUser(_root, { email, password }, { auth }) {
       const user = await authorizeAndReturnUser(auth)
       const verifyEmail = await verifyEmailIsInUse(email)
@@ -72,17 +66,6 @@ module.exports = {
 
       await user.delete()
       return true
-    },
-
-    async login(_root, {email, password}, {auth}) {
-      try {
-        const {token} = await auth.attempt(email, password)
-        return token;
-      } catch(err) {
-        if(err.message.includes('E_USER_NOT_FOUND')) {
-          throw new Error('Invalid credentials')
-        }
-      }
     }
   }
 }
