@@ -1,4 +1,4 @@
-"use strict";
+'use strict'
 
 /*
 |--------------------------------------------------------------------------
@@ -14,50 +14,44 @@
 */
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
-const Route = use("Route");
-const GraphqlAdonis = use("ApolloServer");
-const { userGraphql, credentialUserGraphql } = require("../app/graphql");
+const Route = use('Route')
+const GraphqlAdonis = use('ApolloServer')
+const { userGraphql, credentialUserGraphql } = require('../app/graphql')
 
-Route.route(
-  "/credentials",
-  ({ request, auth, response }) => {
-    return GraphqlAdonis.graphql(
-      {
-        schema: credentialUserGraphql,
-        context: { auth }
-      },
-      request,
-      response
-    );
-  },
-  ["POST"]
-);
+Route.route('/credentials', ({ request, auth, response }) => {
+  return GraphqlAdonis.graphql(
+    {
+      schema: credentialUserGraphql,
+      context: { auth }
+    },
+    request,
+    response
+  )
+}, ['POST']
+)
 
-Route.route(
-  "/users",
-  ({ request, auth, response }) => {
-    return GraphqlAdonis.graphql(
-      {
-        schema: userGraphql,
-        context: { auth }
-      },
-      request,
-      response
-    );
-  },
-  ["POST", "GET", "UPDATE", "DELETE"]
-).middleware(["auth"]);
+Route.route('/users', ({ request, auth, response }) => {
+  return GraphqlAdonis.graphql(
+    {
+      schema: userGraphql,
+      context: { auth }
+    },
+    request,
+    response
+  )
+}, ['POST', 'GET', 'UPDATE', 'DELETE']
+).middleware(['auth'])
 
-if (process.env.NODE_ENV === "test" || 'development') {
-  Route.get("/credentials/graphiql", ({ request, response }) => {
+if (process.env.NODE_ENV === 'development') {
+  Route.get('/credentials/graphiql', ({ request, response }) => {
     return GraphqlAdonis.graphiql(
-      { endpointURL: "/credentials" },
+      { endpointURL: '/credentials' },
       request,
       response
-    );
-  });
+    )
+  })
 
-  Route.get("/users/graphiql", ({ request, response }) => {
-    return GraphqlAdonis.graphiql({ endpointURL: "/users" }, request, response);
-  }).middleware(["auth"]);
+  Route.get('/users/graphiql', ({ request, response }) => {
+    return GraphqlAdonis.graphiql({ endpointURL: '/users' }, request, response)
+  }).middleware(['auth'])
 }

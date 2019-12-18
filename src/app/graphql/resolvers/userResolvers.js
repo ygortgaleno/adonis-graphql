@@ -5,14 +5,14 @@ const authorizeAndReturnUser = async (auth) => {
     await auth.check()
     const user = await auth.getUser()
     return user
-  } catch(err) {
-    if(err.message.includes('E_INVALID_JWT_TOKEN')) {
+  } catch (err) {
+    if (err.message.includes('E_INVALID_JWT_TOKEN')) {
       throw new Error('Missing or invalid jwt token')
     }
   }
 }
 
-const verifyEmailIsInUse = async(email) => {
+const verifyEmailIsInUse = async (email) => {
   try {
     await User.findByOrFail('email', email)
     return true
@@ -24,7 +24,7 @@ const verifyEmailIsInUse = async(email) => {
 const verifyUndefinedValues = (updateObject) => {
   const valuesAllowed = {}
   Object.keys(updateObject).map(key => {
-    if(updateObject[key] !== undefined) {
+    if (updateObject[key] !== undefined) {
       valuesAllowed[key] = updateObject[key]
     }
   })
@@ -33,18 +33,18 @@ const verifyUndefinedValues = (updateObject) => {
 
 module.exports = {
   Query: {
-    async fetchUser(_root, _args, { auth }) {
+    async fetchUser (_root, _args, { auth }) {
       const user = await authorizeAndReturnUser(auth)
       return user.toJSON()
     }
   },
 
   Mutation: {
-    async editUser(_root, { email, password }, { auth }) {
+    async editUser (_root, { email, password }, { auth }) {
       const user = await authorizeAndReturnUser(auth)
       const verifyEmail = await verifyEmailIsInUse(email)
 
-      if(verifyEmail) {
+      if (verifyEmail) {
         throw new Error('Email already in use')
       }
 
@@ -55,12 +55,12 @@ module.exports = {
       return user
     },
 
-    async removeUser(_root, { password }, { auth }) {
+    async removeUser (_root, { password }, { auth }) {
       const user = await authorizeAndReturnUser(auth)
 
       try {
         await auth.attempt(user.email, password)
-      } catch(err) {
+      } catch (err) {
         throw new Error('Your password doesnt match')
       }
 
@@ -69,4 +69,3 @@ module.exports = {
     }
   }
 }
-
